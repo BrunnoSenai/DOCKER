@@ -41,11 +41,6 @@ create table Autores(
 alter table livros
 add column ID_Autor INT references Autores(ID_Autor);
 
-insert into Livros(Titulo, id_editora, id_categoria, id_autor) values
-('Nano Machine', 1,5,1),
-('Solo Leveling', 2,5,2),
-('I Am The Fated Villain', 1,2,3);
-
 insert into Editoras(Nome, Endereco) values
 ('Wiley-Vch','Rua Cheia de agua n° 125'),
 ('Panini','Rua Feliz, Alameda Contente n° 123'),
@@ -64,14 +59,19 @@ insert into Autores(Nome) values
 ('Fated Villain'),
 ('Heitor Amatsu');
 
--Inserção com os relacionamentos-
+insert into Livros(Titulo, id_editora, id_categoria, id_autor) values
+('Nano Machine', 1,5,1),
+('Solo Leveling', 2,5,2),
+('I Am The Fated Villain', 1,2,3);
 
+-Inserção com os relacionamentos-
+-Incluir livro importando dados dasd outras tabelas-
 insert into Livros(Titulo, id_editora, id_categoria, id_autor)
 	values
 		('Nano Machine',
 		(select id_editora from editoras where nome = 'Wiley-Vch'),
 		(select id_categoria from categorias where nome = 'Manhwa'),
-		(select id_Autor from autores where nome = 'Han Joong Wueol Ya')
+		(select id_autor from autores where nome = 'Han Joong Wueol Ya')
 );
 
 insert into Livros(Titulo, id_editora, id_categoria, id_autor) values
@@ -90,20 +90,41 @@ select * from categorias c ;
 select * from autores a ;
 select * from editoras e ;
 select * from livros l ;
-
+	
 -Mostrar dados-
-select * from livros 1 ;
-select titulo from livros 1 where titulo = 'Nano Machine';
-select Titulo from livros 1 where id_categoria = 1;
-select titulo from livros 1 order by titulo asc;
-select titulo from livros 1 order by titulo desc;
-select titulo from livros 1 limit 2;
+select * from livros l ;
+select titulo from livros l where titulo = 'Nano Machine';
+select titulo from livros l where id_categoria = 1;
+select titulo from livros l order by titulo asc;
+select titulo from livros l order by titulo desc;
+select * from livros l limit 2;
 
--JOIN-
+-Retorna registros que tem correspondência em ambas tabelas-
 select livros.titulo, autores.nome 
 from livros
 inner join autores on livros.id_autor = autores.id_autor;
 
+-Retorna registros da tabela esquerada os registros da tabela direita-
+select Livros.titulo, Autores.nome 
+from Livros
+left join Autores on livros.id_autor = autores.id_autor;
+
+-Retorna registros da tabela direita e registros da tabela esquerda-
+select livros.titulo , autores.nome 
+from livros
+right join autores on livros.id_livro = autores.id_autor;
+
+-Retorna todos os registros quando há uma correspondência-
+select livros.titulo , autores.nome 
+from livros
+full outer join autores on livros.id_livro = autores.id_autor;
+
+-Retornar os registros correspondentes a todas as tabelas-
+select livros.titulo, autores.nome, categorias.nome, editoras.nome
+from livros
+inner join autores on livros.id_autor = autores.id_autor
+inner join categorias on livros.id_categoria = categorias.id_categoria
+inner join editoras on livros.id_livro = editoras.id_editora;
 
 select * from categorias c ;
 select * from autores a ;
